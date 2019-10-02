@@ -8,10 +8,16 @@ const app = express();
 
 const server = require("http").Server(app);
 
-mongoose.connect(process.env.CONNECTION_STRING, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+console.log(process.env.DB_USER);
+console.log(process.env.DB_PASSWORD);
+
+mongoose.connect(
+  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0-81scl.mongodb.net/omnistack`,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }
+);
 
 app.use(express.json());
 app.use(cors());
