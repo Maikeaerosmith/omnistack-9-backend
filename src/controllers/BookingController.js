@@ -8,7 +8,7 @@ module.exports = {
 
     const bookings = await Booking.find({ user: user_id, spot: spot_id });
 
-    if (bookings !== null) {
+    if (bookings.length > 0) {
       return res
         .status(400)
         .json({ message: "User already have booking on this spot!" });
