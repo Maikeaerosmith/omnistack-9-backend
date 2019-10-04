@@ -8,11 +8,11 @@ module.exports = {
 
     const bookings = await Booking.find({ user: user_id, spot: spot_id });
 
-    if (bookings.length > 0) {
-      return res
-        .status(400)
-        .json({ message: "User already have booking on this spot!" });
-    }
+    // if (bookings.length > 0) {
+    //   return res
+    //     .status(400)
+    //     .json({ message: "User already have booking on this spot!" });
+    // }
 
     const booking = await Booking.create({
       user: user_id,
@@ -24,6 +24,12 @@ module.exports = {
       .populate("spot")
       .populate("user")
       .execPopulate();
+
+    const ownerSocket = req.connectedUsers[booking.spot.user];
+
+    if (ownerSocket) {
+      req.io.to(ownerSocket).emit("booking_request", booking);
+    }
 
     return res.json(booking);
   }
